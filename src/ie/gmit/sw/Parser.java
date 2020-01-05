@@ -55,29 +55,38 @@ public class Parser implements Runnable {
 	/**
 	 * QueryParser method
 	 */
-
 	public Map<Integer, LanguageEntry> queryParser(int k, String file) {
 		
+		//Declare two new maps and use a ConcurrentHashMap
 		Map<Integer, Integer> map = new HashMap<>();
 		Map<Integer, LanguageEntry> queryMap = new ConcurrentHashMap<>();
 		
+		//Try Catch Statement
 		try {
+			//New BufferedReader br
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+			
+			//Initialization of String Variables
 			String line = null;
 			String words = null;
-			
-			ArrayList<String> tempArray = new ArrayList<>();
 			String queryText = "";
 			
+			//TempArray List
+			ArrayList<String> tempArray = new ArrayList<>();
+
+			//While there is still a next line to be read, then read
 			while ( (line = br.readLine()) != null) {
+				//Trim next line
 				words = line.trim().replace("\n", "").replace("\r", "");
+				//Add String words to the ArrayList tempArray
 				tempArray.add(words);
 			}
 			
+			//New String using join
 			String newWord = String.join("", tempArray);
 			
 			/**
-			 * Checks the size of the newWord String doesn't exceed over 400 characters
+			 * Checks the size of the newWord String doesn't exceed over 400 characters then closes BufferedReader
 			 */
 			
 			for (char c : newWord.toCharArray()) {
@@ -101,22 +110,21 @@ public class Parser implements Runnable {
 				}
 			}
 			
-			/**
-			 * Map goes through Sort method
-			 */
-			
+			//Map goes through Sort Method
 			map = Sort(map);
+			
+			//Initialized Variable
 			int current = 1;
 			
 			/**
-			 * For each map.entrtSet() in couple do...
+			 * For each couple:
+			 * entry = new Language with couple key & value
+			 * set Rank then put into queryMap 
+			 * Increment rank for next couple
 			 */
-			
 			for (Map.Entry<Integer, Integer> couple : map.entrySet()) {
-				
 				LanguageEntry entry = new LanguageEntry(couple.getKey(), couple.getValue());
 				entry.setRank(current);
-				
 				queryMap.put(entry.getKmer(), entry);
 				if (current <= 1)
 					current++;
@@ -126,9 +134,11 @@ public class Parser implements Runnable {
 			e.printStackTrace();
 		}
 		
+		//Return queryMap
 		return queryMap;
 	}
 	
+	//Sort method used to sort the passed Map by the frequency of a kmer (words) repetited appearance
 	public static Map<Integer, Integer> Sort(Map<Integer, Integer> wordCount) {
 		return wordCount.entrySet().parallelStream().sorted((Map.Entry.<Integer, Integer>comparingByValue().reversed())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (i, i2) -> i, LinkedHashMap::new));
 	}
