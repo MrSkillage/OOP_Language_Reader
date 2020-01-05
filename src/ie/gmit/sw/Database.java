@@ -3,13 +3,15 @@ package ie.gmit.sw;
 import java.util.*;
 
 public class Database {
+	
 	private Map<Language, Map<Integer, LanguageEntry>> db = new TreeMap<>();
+	private int kmer, frequency;
 	
 	public void add(CharSequence s, Language lang) {
-		int kmer = s.hashCode();
+		kmer = s.hashCode();
 		Map<Integer, LanguageEntry> langDb = getLanguageEntries(lang);
 		
-		int frequency = 1;
+		frequency = 1;
 		if (langDb.containsKey(kmer)) {
 			frequency += langDb.get(kmer).getFrequency();
 		}
