@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Runner {
 
-	public static void main(String[] args) throws Throwable{
+	public static void main(String[] args) {
 		
 		//Call menu and in
 		Menu menu = new Menu();
