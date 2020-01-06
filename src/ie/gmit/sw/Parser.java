@@ -140,6 +140,12 @@ public class Parser implements Runnable {
 	
 	//Sort method used to sort the passed Map by the frequency of a kmer (words) repetited appearance
 	public static Map<Integer, Integer> Sort(Map<Integer, Integer> wordCount) {
+		/**Credited through StackOverflow
+		 * https://stackoverflow.com/questions/44739814/how-to-iterate-through-map-by-values-and-if-the-values-are-same-sort-them-by-key/44740231
+		 * https://stackoverflow.com/questions/29860667/how-to-sort-a-linkedhashmap-by-value-in-decreasing-order-in-java-stream/29861270
+		 * Credited through dzone.com
+		 * https://dzone.com/articles/how-to-sort-a-map-by-value-in-java-8 
+		 */
 		return wordCount.entrySet().parallelStream().sorted((Map.Entry.<Integer, Integer>comparingByValue().reversed())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (i, i2) -> i, LinkedHashMap::new));
 	}
 	
